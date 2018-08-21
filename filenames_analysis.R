@@ -6,6 +6,15 @@ library(ggplot2)
 file_names <- list.files("./data/ISSPubs_txt/")
 
 
+titles <- read.csv('/Users/katherinesimeon/Documents/GitHub/ISSResearch/data/topics.csv')
+
+titles %>% 
+  arrange(desc(year))
+
+titles %>% 
+  arrange(desc(year)) %>% 
+  head(6)
+
 # use regex to grab years
 # note: pretty crude, gets any 4 digits
 #   could refine with following/preceding 
