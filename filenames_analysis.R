@@ -1,22 +1,7 @@
-## Extracts project and year from file names of 
-## ISS Research publications
-## Aug 2018, Datanaut KickOff
-
-
-
-# prep --------------------------------------------------------------------
-
-install.packages("hrbrthemes")
-
-# load libraries ----------------------------------------------------------
-
-library(dplyr)
+## Analyses based on filenames
+# I DON'T THINK THIS WORKS
+library(tidyverse)
 library(ggplot2)
-
-
-
-# make file list and extract ---------------------------------------------------------
-
 
 file_names <- list.files("./data/ISSPubs_txt/")
 
@@ -28,7 +13,7 @@ file_names <- list.files("./data/ISSPubs_txt/")
 years <- file_names %>% 
   stringr::str_extract(pattern = "[0-9]{4}") %>% 
   as.numeric() 
-  
+
 
 # Extracts first group of characters (partially)
 # representing projects by matching any digit/letter
@@ -39,8 +24,8 @@ projects <- file_names %>%
 # make data frame and drop years that are outside
 # plausible range
 iss_research <- data.frame(project_name = projects,
-                       year = years,
-                       stringsAsFactors = FALSE) %>% 
+                           year = years,
+                           stringsAsFactors = FALSE) %>% 
   mutate(year = ifelse(year > 1960 & year < 2020,
                        year, 
                        NA)) %>% 
@@ -64,21 +49,21 @@ iss_research <- list(iss_research,
                      iss_research_summary,
                      iss_research_summary_byYear) %>% 
   purrr::reduce_right(left_join)
-  
 
 
-# make plot
 iss_research %>% 
-  filter(n > 20) %>% 
-  arrange(desc(project_name,n_years)) %>% 
+  filter(n > 15) %>% 
   ggplot(aes(x = year,
-             y = project_name,
+             y = n_years,
              color = n)) +
-  geom_line() +
-  geom_point(aes(size = n_years)) +
-  scale_size_continuous(breaks = c(10,20,40)) +
-  labs(x = "Year",
-       y = "Project/Experiment",
-       colour = "Total Frequ.",
-       size = "Annual Frequ.") 
-#  hrbrthemes::theme_ipsum_tw()
+  geom_density() +
+  geom_point() +
+  geom_jitter()
+  # scale_size_continuous(breaks = c(10,20,40)) 
+
+titles %>%
+  group_by(topic_short,year) %>% 
+  summarise(n_years = n()) %>% 
+  filter(n > 15) %>% 
+  ggplot(aes(x = year, y=n_years, colour = topic_short)) + 
+  geom_point(group = topic_short)
