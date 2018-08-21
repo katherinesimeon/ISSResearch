@@ -102,6 +102,7 @@ a2017 <- text_calc %>%
   theme(panel.grid.minor = element_blank(),
         panel.grid.major = element_blank()) 
 
+# Patchwork to put oldest and newest article together
 a1984 + a2017
 
 ############### 
