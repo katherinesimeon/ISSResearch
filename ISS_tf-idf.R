@@ -1,7 +1,7 @@
 library(tidyverse)
 library(readtext)
 library(tidytext)
-library(
+library(patchwork)
 
 ## Load Text Data
 
@@ -105,14 +105,4 @@ a2017 <- text_calc %>%
 # Patchwork to put oldest and newest article together
 a1984 + a2017
 
-############### 
-
-
-
-
-# get total number of instances of each word, make it new column in table
-text_calc_count <- text_calc %>% 
-  count(word, sort=TRUE) %>% 
-  filter(nn > 1000) 
-tail(text_calc_count)
 
